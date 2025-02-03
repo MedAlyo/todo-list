@@ -1,0 +1,66 @@
+<div class="max-w-screen-xl mx-auto px-4 md:px-8">
+    <div class="items-start justify-between py-4 border-b md:flex">
+        <div>
+            <a [routerLink]="['/Home']">
+                <h3 class="text-gray-800 text-2xl font-bold">
+                    TodoList
+                </h3>
+            </a> 
+        </div>
+        <div class="items-center gap-x-3 mt-6 md:mt-0 sm:flex">
+            <a href="#" (click)="toggleModal('login'); $event.preventDefault()"  
+                class="block px-4 py-2 text-center text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+            >
+                Log In
+            </a>
+            <a
+                href="#" (click)="toggleModal('register'); $event.preventDefault()"
+                class="block px-4 py-2 mt-3 text-center text-gray-700 duration-150 font-medium rounded-lg border hover:bg-gray-50 active:bg-gray-100 sm:mt-0 md:text-sm"
+            >
+                Register
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Main modal -->
+<div *ngIf="isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-lg">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-300 rounded-t">
+                <h3 class="text-xl font-semibold text-gray-800">
+                    {{ currentModal === 'login' ? 'Log in to your account' : 'Create an account' }}
+                </h3>
+                <button type="button" (click)="toggleModal(null)" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center transition duration-150">
+                    <fa-icon [icon]="faTimes" class="w-5 h-5"></fa-icon>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="flex flex-col items-center justify-center space-y-5 p-4">
+                <div class="max-w-sm w-full text-gray-600">
+                    <form (ngSubmit)="onSubmit()" class="mt-2 space-y-5">
+                        <div *ngIf="currentModal === 'login'">
+                            <label class="font-medium">Email</label>
+                            <input type="email" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 rounded-lg" />
+                            <label class="font-medium">Password</label>
+                            <input type="password" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 rounded-lg" />
+                            <button type="submit" class="mt-4 w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg duration-150">Sign in</button>
+                        </div>
+                        <div *ngIf="currentModal === 'register'">
+                            <label class="font-medium">Name</label>
+                            <input type="text" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 rounded-lg" />
+                            <label class="font-medium">Email</label>
+                            <input type="email" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 rounded-lg" />
+                            <label class="font-medium">Password</label>
+                            <input type="password" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 rounded-lg" />
+                            <button type="submit" class="mt-4 w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg duration-150">Create Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

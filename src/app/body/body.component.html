@@ -1,0 +1,88 @@
+<div class="bg-gray-100 p-8 flex-grow">
+  <div class="mt-12 max-w-2xl mx-auto px-4">
+    <div class="items-start justify-between sm:flex">
+      <div>
+        <h4 class="text-gray-800 text-xl font-semibold">Tasks</h4>
+        <p class="mt-2 text-gray-600 text-base sm:text-sm">Add or delete your tasks</p>
+      </div>
+      <button [routerLink]="['/add-task']" class="inline-flex items-center justify-center gap-1 py-2 px-3 mt-2 font-medium text-sm text-center text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg sm:mt-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        </svg>
+        New Task
+      </button>
+    </div>
+
+    <h2 class="mt-8 text-gray-800 font-medium">Select your tasks</h2>
+
+    <ul class="mt-6 space-y-4">
+      <li *ngFor="let task of tasks; let i = index" class="flex items-center p-4 border rounded-lg shadow-sm bg-white hover:ring-2 hover:ring-indigo-600 cursor-pointer" (click)="toggleTask(task)">
+        <input type="checkbox" [(ngModel)]="task.completed"  class="mr-3 w-7 h-7 text-blue-600 rounded focus:ring-2 focus:ring-blue-500" />
+
+        <div class="flex items-center justify-between w-full">
+          <div class="flex items-center gap-3">
+            <div class="flex-none">
+              <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="4" />
+              </svg>
+            </div>
+
+            <div [ngClass]="{ 'line-through text-red-600': task.completed }">
+              <h3 class="task-title leading-none text-gray-800">{{ task.title }}</h3>
+              <p class="task-description mt-1 text-sm text-gray-600 w-64" 
+              [ngClass]="{'whitespace-nowrap overflow-hidden overflow-ellipsis': isCollapsed[i],
+               'whitespace-normal': !isCollapsed[i]}"
+               
+                >{{ task.description }}</p>
+            </div>
+          </div>
+
+          <div class="flex space-x-2">
+            <button (click)="$event.stopPropagation(); toggleDescription(i)" class="text-blue-600 text-sm border border-blue-600 rounded-lg px-3 py-1 duration-150 bg-white hover:bg-red-100 focus:bg-red-200">{{ isCollapsed[i] ? 'View More' : 'View Less' }}</button>
+            <button (click)="$event.stopPropagation(); toggleModal('edit', task)" class="text-green-600 text-sm border border-green-600 rounded-lg px-3 py-1 duration-150 bg-white hover:bg-green-100 focus:bg-green-200">Edit</button>
+            <button (click)="$event.stopPropagation(); deleteTask(i)" class="text-red-600 text-sm border border-red-600 rounded-lg px-3 py-1 duration-150 bg-white hover:bg-red-100 focus:bg-red-200">Delete</button>
+          </div>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main modal -->
+<div *ngIf="isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="relative p-4 w-full max-w-2xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow-lg">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-300 rounded-t">
+              <h3 class="text-xl font-semibold text-gray-800">
+                  {{ currentModal === 'edit' ? 'Update Task' : 'Add new Task' }}
+              </h3>
+              <button type="button" (click)="toggleModal(null)" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center transition duration-150">
+                  <fa-icon [icon]="faTimes" class="w-5 h-5"></fa-icon>
+                  <span class="sr-only">Close modal</span>
+              </button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="flex flex-col items-center justify-center space-y-5 p-4">
+              <div class="max-w-sm w-full text-gray-600">
+                  <form (ngSubmit)="onSubmit()" class="mt-2 space-y-5">
+                      <!-- Edit Task -->
+                      <div *ngIf="currentModal === 'edit'">
+                          <label class="font-medium text-gray-700">Title</label>
+                          <input type="text" [(ngModel)]="editTask.title" required name="editTaskTitle" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 rounded-lg transition duration-150" name="editTaskTitle" />
+                          
+                          <label class="font-medium text-gray-700">Description</label>
+                          <textarea [(ngModel)]="editTask.description" rows="4" required name="editTaskDescription" required class="mt-2 w-full px-3 py-2 text-gray-800 bg-gray-100 outline-none border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 rounded-lg transition duration-150" name="editTaskDescription"></textarea>
+
+                          <button type="submit" class="mt-4 w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg transition duration-150">Update</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
