@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../data.service';
+import { TareasService } from '../tareas.service';
 import { Router } from '@angular/router';
+import { Categoria } from '../categoria.interface';
+import { CategoriasService } from '../categorias.service';
 
 
 @Component({
@@ -14,35 +16,52 @@ import { Router } from '@angular/router';
 })
 export class AddTaskComponent implements OnInit{
 
-  tasks: { id: number,  title: string, description: string, completed: boolean }[] = [];
-  newTask = {  id: 0, title: '', description: '', completed: false };
-  isCollapsed: { [key: number]: boolean } = {};
+  newTask = { 
+    titulo: '', 
+    descripcion: '', 
+    categoria_id: 1, 
+    nivel_dificultad: 'medio',
+    es_publica: false
+  };
 
-  constructor(private dataService: DataService, private router: Router) {}
+  categorias: Categoria[] = [];
+
+  constructor(private tareasService: TareasService, 
+    private router: Router,
+    private categoriasService: CategoriasService) {}
 
   ngOnInit(): void {
-    this.loadTasks(); // Load tasks on initialization
+    this.fetchCategorias();
   }
 
-  loadTasks(): void {
-    this.tasks = this.dataService.getTasks();
+  // Load available categories for selection
+  fetchCategorias(): void {
+    this.categoriasService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    });
   }
 
   // Handle the form submission
-  onSubmit(): void {        
-    
-    this.newTask.id = this.tasks.length > 0 ? this.tasks[this.tasks.length - 1].id + 1 : 1;// Assign an ID before adding
-
-    this.addTask(this.newTask); // Add new task if in add mode
-    
-    this.newTask = { id: 0, title: '', description: '', completed: false }; // Reset newTask after submission
-    
-    this.router.navigate(['/Home']);// Navigate to Home page
+  onSubmit(): void {
+    this.tareasService.createTask(this.newTask).subscribe({
+      next: (response) => {
+        console.log('Task created successfully:', response);
+        // Navigate to Home page or tasks list
+        this.router.navigate(['/Home']);
+      },
+      error: (error) => {
+        console.error('Error adding task:', error);
+        // Optionally, display an error message to the user
+      }
+    });
   }
 
-  addTask(task: { id: number; title: string; description: string; completed: boolean }): void {
-    this.tasks.push(task);
-    this.dataService.saveToLocalStorage();
+  onCancel(): void {
+    this.router.navigate(['/Home']);
   }
-
 }
