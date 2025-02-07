@@ -7,7 +7,7 @@ import { Categoria } from './categoria.interface';
   providedIn: 'root',
 })
 export class CategoriasService {
-  private apiUrl = 'http://localhost/api/categorias.php'; // API endpoint for categories
+  private apiUrl = 'https://c74f4156107e.ngrok.app/api/mohamed/categorias.php'; // API endpoint for categories
 
   constructor(private http: HttpClient) {}
 

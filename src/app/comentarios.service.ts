@@ -15,7 +15,7 @@ export interface Comentario {
   providedIn: 'root'
 })
 export class ComentariosService {
-  private apiUrl = 'http://localhost/api/comentarios.php';
+  private apiUrl = 'https://c74f4156107e.ngrok.app/api/mohamed/comentarios.php';
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
 

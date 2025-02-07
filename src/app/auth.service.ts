@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost/api/usuarios.php';
+  private apiUrl = 'https://c74f4156107e.ngrok.app/api/mohamed/usuarios.php';
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: any) {}
 

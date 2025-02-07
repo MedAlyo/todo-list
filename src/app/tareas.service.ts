@@ -18,7 +18,7 @@ export interface Tarea {
   providedIn: 'root'
 })
 export class TareasService {
-  private apiUrl = 'http://localhost/api/tareas.php';
+  private apiUrl = 'https://c74f4156107e.ngrok.app/api/mohamed/tareas.php';
 
   constructor(private http: HttpClient) {}
 
